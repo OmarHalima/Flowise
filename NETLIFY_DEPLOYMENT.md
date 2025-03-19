@@ -1,6 +1,6 @@
-# Deploying Flowise to Netlify
+# Deploying Flowise UI to Netlify
 
-This guide will help you deploy your Flowise application to Netlify.
+This guide will help you deploy the Flowise UI application to Netlify as a standalone frontend.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ The netlify.toml file in the root of your project already contains the necessary
 ```toml
 [build]
   base = "."
-  command = "pnpm install && pnpm build"
+  command = "pnpm run netlify-build"
   publish = "packages/ui/dist"
 
 [build.environment]
@@ -32,7 +32,7 @@ The netlify.toml file in the root of your project already contains the necessary
 ```
 
 Make sure these settings match in the Netlify deploy configuration:
-- Build command: `pnpm install && pnpm build`
+- Build command: `pnpm run netlify-build`
 - Publish directory: `packages/ui/dist`
 
 ### 3. Configure environment variables
@@ -42,16 +42,12 @@ In your Netlify site settings, go to "Site settings" > "Environment variables" a
 - `NPM_FLAGS`: `--version`
 - `NODE_VERSION`: `18.15.0`
 
-### 4. Update the UI environment variables
+### 4. UI-only Deployment
 
-Before deploying, make sure to update the `.env` file in the `packages/ui` directory with the correct API URL:
+Since we're deploying in UI-only mode (without an API backend), the UI will have limited functionality. To access full functionality in the future, you would need to:
 
-```
-VITE_API_BASE_URL=https://your-backend-api-url.com
-VITE_UI_BASE_URL=https://your-netlify-site-name.netlify.app
-```
-
-**Note**: For the frontend to work properly, you'll need to deploy the backend (Flowise API server) separately to a platform like Heroku, Railway, Render, etc., and update the VITE_API_BASE_URL accordingly.
+1. Deploy the backend separately
+2. Update the `VITE_API_BASE_URL` environment variable to point to your backend
 
 ### 5. Deploy
 
@@ -59,13 +55,4 @@ Click "Deploy site" in Netlify. The deployment process will start and you can mo
 
 ### 6. Configure domain (Optional)
 
-After deployment, you can configure a custom domain in the Netlify settings.
-
-## Backend Deployment
-
-Remember that this only deploys the UI. You need to deploy the backend separately:
-
-1. Choose a platform that supports Node.js applications (Heroku, Railway, Render, etc.)
-2. Deploy the backend following the platform's instructions
-3. Update the VITE_API_BASE_URL in the UI environment variables to point to your backend URL
-4. Redeploy the UI if necessary 
+After deployment, you can configure a custom domain in the Netlify settings. 
