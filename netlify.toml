@@ -1,0 +1,13 @@
+[build]
+  base = "."
+  command = "pnpm run netlify-build"
+  publish = "packages/ui/dist"
+
+[build.environment]
+  NODE_VERSION = "18.15.0"
+  NPM_FLAGS = "--version"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
